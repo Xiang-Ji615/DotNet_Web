@@ -1,0 +1,20 @@
+﻿@using EddyProject_Bo.ViewModel_Login
+@model UserViewModel
+
+@Styles.Render("~/Content/Login")
+
+<div class="wrapper">
+    <form action="@Url.Action("DoLogin", "Authentication")" method="post" name="Login_Form" class="form-signin">
+        <h3 class="form-signin-heading">Welcome Back! Please Sign In</h3>
+        <hr class="colorgraph"><br>
+        <div class="bg-danger">
+            <strong>@Html.ValidationMessage("error")</strong>
+        </div>
+
+        <input type="text" class="form-control" name="Username" placeholder="Username" required="" autofocus="" />
+        <input type="password" class="form-control" name="Password" placeholder="Password" required="" />
+        <input type="hidden" class="form-control" name="returnURL" placeholder="returnURL" required="" value="@Model.ReturnURL" />
+        <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit">Login</button>
+    </form>
+</div>
+

@@ -1,0 +1,101 @@
+﻿@using EddyProject_Bo.ViewModel_Curd
+@using EddyProject_Common.Model
+@model CurdViewModel
+
+@{
+    ViewBag.Title = "CURD Demo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CURD Demo</h2>
+<table class="table table-hover table-bordered table-striped">
+    <thead>
+        <tr>
+            @using(Html.BeginForm("Paged", "Curd", FormMethod.Get, new { id="FormSearch" })) {
+            <th>
+                <div class="form-group">
+                    Username
+                    <input type="text" id="tbUsername" name="username" class="form-control" value="@ViewBag.username" />
+                </div>
+            </th>
+            <th>
+                <div class="form-group">
+                    Password
+                    <input type="text" id="tbPassword" name="password" class="form-control" value="@ViewBag.password"/>
+                </div>
+            </th>
+            <th>
+                <div class="form-group">
+                    Return URL
+                    <input type="text" id="txRetURL" class="form-control invisible" />
+                </div>
+            </th>
+            <th>               
+                <div class="form-group">
+                    Actions
+                    <input type="text" id="txActions" class="form-control invisible" />
+                    <input type="hidden" name="pageSize" value="@Model.Pager.PageSize" class="form-control" />
+                    <input type="hidden" name="page" value="1" class="form-control" />
+                </div>
+            </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (EddyProject_Dao.Model_Login.User user in Model.UserList)
+        {
+            <tr>
+                <td>
+                    @Html.Label(user.Username)
+                </td>
+                <td>
+                    @Html.Label(user.Password)
+                </td>
+                <td>
+                    @Html.Label(user.ReturnURL)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { name = user.Username }) |
+                    @Html.ActionLink("Update", "Update", new { name = user.Username }) |
+                    @Html.ActionLink("Delete", "Delete", new { name = user.Username })
+                </td>
+            </tr>
+            }
+    </tbody>
+</table>
+
+@if (ViewBag.showPager)
+{
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li @if (!Model.PagerObject.HasPrevious)
+        { <text> class="disabled" </text>  }>
+            <a href="@if (Model.PagerObject.HasPrevious)
+            {@Model.PagerObject.PreviousURL}
+            else
+            { <text>#</text> } " aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        @foreach (PagerElement pagerElement in Model.PagerObject.PageElements)
+        {
+            <li @if (pagerElement.Attr.IsActivated)
+            { <text> class="active" </text>  }><a href="@pagerElement.Attr.Href">@pagerElement.PageNumber</a></li>
+        }
+        <li @if (!Model.PagerObject.HasNext)
+        { <text> class="disabled" </text>  }>
+            <a href="@if (Model.PagerObject.HasNext)
+            {@Model.PagerObject.NextURL}
+            else
+            { <text>#</text> } " aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+}
+
+@section scripts
+{
+ @Scripts.Render("~/Content/Curd/Search")
+}
